@@ -79,13 +79,13 @@
 
   - name: Send the deployment across to the new instance
     copy: 
-       src: target/positionreceiver-0.0.1-SNAPSHOT.war
+       src: target/fleetman-0.0.1-SNAPSHOT.war	
        dest: /home/ec2-user/webapp/target/
        mode: 0700
 
   - name: Build a link to the executable so it becomes a service
     file:
-            src: /home/ec2-user/webapp/target/positionreceiver-0.0.1-SNAPSHOT.war
+            src: /home/ec2-user/webapp/target/fleetman-0.0.1-SNAPSHOT.war	
             dest: /etc/init.d/microservice
             state: link
     become: true

@@ -1,4 +1,4 @@
-package com.virtualpairprogrammers;
+/*package com.virtualpairprogrammers;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,4 +15,4 @@ public class FleetmanApplicationTests {
 	public void contextLoads() {
 	}
 
-}
+}*/

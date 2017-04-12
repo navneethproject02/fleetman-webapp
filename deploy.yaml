@@ -101,4 +101,4 @@
     wait_for:
             host: localhost
             port: 8080
-            state: started
+            state: started 

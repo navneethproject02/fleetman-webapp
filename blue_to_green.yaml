@@ -1,0 +1,72 @@
+# Series of steps to implement a Green -> Blue switchover
+#Step 1: filter/get Blue Server B1{Deploy:Blue} -- new_server
+#Step 2: filter/get Green Server B1{Deploy:Green} -- old_server
+#Step 3: old_server --> disassocaite EIP , then old server will get a new ip assigned by AWS
+#Step 4: new_server --> associate  EIP , new server will loose existing IP address and get EIP
+#Step 5: old_server --> (Terminate) -- This is optional , its better to do it after succssful smoke test
+#Step 6 & 7: set new_server tag value, i.e  Deploy:Blue --> Deploy:Green
+
+
+- hosts: localhost
+ vars: 
+     region: us-east-1
+     keypair_name: Balvinders_ec2_key_pair
+     live_ip_address: 52.2.4.37
+
+  tasks:
+  - name: Gather facts about the new blue server
+    ec2_remote_facts:
+       filters:
+          "tag:Deploy": Blue
+          "tag:Name": Webserver
+          instance-state-name: running
+       region: "{{ region }}"
+    register: new_server
+
+  - name: Get the id of the old, soon to be dead, green server
+    ec2_remote_facts:
+       filters:
+          "tag:Deploy": Green
+          "tag:Name": Webserver
+          instance-state-name: running
+       region: "{{ region }}"
+    register: old_green
+
+  - name: Deallocate the EIP
+    ec2_eip:
+       device_id: "{{ old_green.instances[0].id }}"
+       ip: "{{ live_ip_address }}"
+       state: absent
+       region: "{{ region }}"
+    when: old_green.instances[0].id is defined
+
+  - name: Allocate the EIP to the new instance
+    ec2_eip:
+      device_id: "{{ new_server.instances[0].id }}"
+      ip: "{{ live_ip_address }}"
+      region: "{{ region }}"
+
+  - name: Terminate the existing Green Server.
+    ec2:
+      exact_count: 0
+      count_tag:
+        Deploy: Green
+        Name: Webserver
+      region: "{{ region }}"
+      image: notneeded
+
+  - name: All done, set new server to Green status
+    ec2_tag:
+       region: "{{ region }}"
+       resource: "{{ new_server.instances[0].id }}"
+       tags:
+          Deploy: Green
+       state: present
+
+  - name: Remove Blue Tag
+    ec2_tag:
+       region: "{{ region }}"
+       resource: "{{ new_server.instances[0].id }}"
+       tags:
+          Deploy: Blue
+       state: absent

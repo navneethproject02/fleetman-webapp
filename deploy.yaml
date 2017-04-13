@@ -111,7 +111,7 @@
      region: us-east-1
      live_ip_address: 52.2.4.37
 
- tasks:
+  tasks:
   - name: Get the id of green server 
     ec2_remote_facts:
        filters:
@@ -121,7 +121,7 @@
        region: "{{ region }}"
     register: green_server
     
-   - name: Allocate the EIP to the new instance
+  - name: Allocate the EIP to the new instance
     ec2_eip:
       device_id: "{{ green_server.instances[0].id }}"
       ip: "{{ live_ip_address }}"

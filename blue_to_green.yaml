@@ -17,7 +17,7 @@
   - name: Gather facts about the new blue server
     ec2_remote_facts:
        filters:
-          "tag:Deploy": Blue
+          "tag:Deploy": BLUE
           "tag:Name": Webserver
           instance-state-name: running
        region: "{{ region }}"
@@ -26,7 +26,7 @@
   - name: Get the id of the old, soon to be dead, green server
     ec2_remote_facts:
        filters:
-          "tag:Deploy": Green
+          "tag:Deploy": GREEN
           "tag:Name": Webserver
           instance-state-name: running
        region: "{{ region }}"
@@ -46,21 +46,21 @@
       ip: "{{ live_ip_address }}"
       region: "{{ region }}"
 
-  - name: Terminate the existing Green Server.
-    ec2:
-      exact_count: 0
-      count_tag:
-        Deploy: Green
-        Name: Webserver
-      region: "{{ region }}"
-      image: notneeded
+#  - name: Terminate the existing Green Server.
+#    ec2:
+#      exact_count: 0
+#      count_tag:
+#        Deploy: GREEN
+#        Name: Webserver
+#     region: "{{ region }}"
+#     image: notneeded
 
   - name: All done, set new server to Green status
     ec2_tag:
        region: "{{ region }}"
        resource: "{{ new_server.instances[0].id }}"
        tags:
-          Deploy: Green
+          Deploy: GREEN
        state: present
 
   - name: Remove Blue Tag
@@ -68,5 +68,5 @@
        region: "{{ region }}"
        resource: "{{ new_server.instances[0].id }}"
        tags:
-          Deploy: Blue
+          Deploy: BLUE
        state: absent

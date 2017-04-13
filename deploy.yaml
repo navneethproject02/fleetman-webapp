@@ -106,6 +106,12 @@
             port: 8080
             state: started
 
+- hosts: localhost
+  vars: 
+     region: us-east-1
+     live_ip_address: 52.2.4.37
+
+ tasks:
   - name: Get the id of green server 
     ec2_remote_facts:
        filters:

@@ -55,6 +55,14 @@
 #     region: "{{ region }}"
 #     image: notneeded
 
+  - name: Remove Blue Tag from new_server
+    ec2_tag:
+       region: "{{ region }}"
+       resource: "{{ new_server.instances[0].id }}"
+       tags:
+          Deploy: BLUE
+       state: absent
+       
   - name: All done, set new server to Green status
     ec2_tag:
        region: "{{ region }}"
@@ -62,11 +70,21 @@
        tags:
           Deploy: GREEN
        state: present
-
-  - name: Remove Blue Tag
+   
+  - name: Remove Green from old_green Tag
     ec2_tag:
        region: "{{ region }}"
-       resource: "{{ new_server.instances[0].id }}"
+       resource: "{{ old_green.instances[0].id }}"
+       tags:
+          Deploy: GREEN
+       state: absent
+       
+  - name: Set old green server to Blue status
+    ec2_tag:
+       region: "{{ region }}"
+       resource: "{{ old_green.instances[0].id }}"
        tags:
           Deploy: BLUE
-       state: absent
+       state: present
+
+

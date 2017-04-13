@@ -8,7 +8,7 @@
 
 
 - hosts: localhost
- vars: 
+  vars: 
      region: us-east-1
      keypair_name: Balvinders_ec2_key_pair
      live_ip_address: 52.2.4.37

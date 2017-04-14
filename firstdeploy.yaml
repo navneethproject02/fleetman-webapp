@@ -109,7 +109,7 @@
 - hosts: localhost
   vars: 
      region: us-east-1
-     live_ip_address: 52.2.4.37
+     live_ip_address: 23.20.195.139
 
   tasks:
   - name: Get the id of green server 

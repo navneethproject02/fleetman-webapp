@@ -30,7 +30,7 @@ public class FleetmanApplication {
 	   instance.setIpAddress(info.get(AmazonInfo.MetaDataKey.publicIpv4));
 	   instance.setDataCenterInfo(info);
 	   instance.setNonSecurePort(8080);
-	   return instance;
+	   return instance;   
 	}
 	
 }

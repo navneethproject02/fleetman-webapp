@@ -9,7 +9,7 @@
     </style>
   </head>
   <body>
-	<h1>Vehicle Info for ${model.vehicle.name}</h1>
+	<h1 color='red'>Vehicle Info for ${model.vehicle.name}</h1>
 	
 	<p>The last report for this vehicle was at ${model.position.timestamp}</p>
 	
